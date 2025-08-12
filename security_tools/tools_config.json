@@ -1,0 +1,42 @@
+{
+  "metasploit": {
+    "image": "rapid7/metasploit-framework:latest",
+    "command": ["msfconsole", "-q", "-x"],
+    "environment": {},
+    "volumes": {},
+    "timeout": 1800,
+    "description": "Metasploit Framework for penetration testing and exploit development"
+  },
+  "openvas": {
+    "image": "immauss/openvas:latest",
+    "command": ["gvm-start"],
+    "environment": {},
+    "volumes": {},
+    "timeout": 3600,
+    "description": "OpenVAS for vulnerability scanning and assessment"
+  },
+  "caldera": {
+    "image": "mitre/caldera:latest",
+    "command": ["python", "server.py"],
+    "environment": {},
+    "volumes": {},
+    "timeout": 1800,
+    "description": "MITRE Caldera for automated adversary emulation"
+  },
+  "nmap": {
+    "image": "nmap/nmap:latest",
+    "command": ["nmap", "-sS", "-sV", "-O"],
+    "environment": {},
+    "volumes": {},
+    "timeout": 900,
+    "description": "Nmap for network discovery and security auditing"
+  },
+  "sqlmap": {
+    "image": "sqlmap/sqlmap:latest",
+    "command": ["python", "sqlmap.py"],
+    "environment": {},
+    "volumes": {},
+    "timeout": 1200,
+    "description": "SQLMap for automated SQL injection and database takeover"
+  }
+} 

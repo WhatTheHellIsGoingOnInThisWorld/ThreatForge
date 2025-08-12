@@ -1,0 +1,26 @@
+fastapi==0.104.1
+uvicorn[standard]==0.24.0
+sqlalchemy==2.0.23
+alembic==1.12.1
+passlib[bcrypt]==1.7.4
+python-jose[cryptography]==3.3.0
+python-multipart==0.0.6
+celery==5.3.4
+redis==5.0.1
+psycopg2-binary==2.9.9
+python-dotenv==1.0.0
+pydantic==2.5.0
+pydantic-settings==2.1.0
+reportlab==4.0.7
+boto3==1.34.0
+docker==6.1.3
+
+# AI/ML Dependencies
+langchain==0.1.0
+langchain-groq==0.0.1
+groq==0.4.2
+openai==1.12.0
+tiktoken==0.5.2
+numpy==1.24.3
+pandas==2.0.3
+scikit-learn==1.3.0 

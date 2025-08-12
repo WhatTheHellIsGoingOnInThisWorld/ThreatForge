@@ -1,0 +1,86 @@
+version: '3.8'
+
+services:
+  # FastAPI Application
+  threatforge-api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://threatforge:password@postgres:5432/threatforge
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=your-super-secret-key-change-in-production
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./storage:/app/storage
+      - ./security_tools:/app/security_tools
+    networks:
+      - threatforge-network
+
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=threatforge
+      - POSTGRES_USER=threatforge
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - threatforge-network
+
+  # Redis for Celery
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - threatforge-network
+
+  # Celery Worker
+  celery-worker:
+    build: .
+    command: celery -A app.celery_app worker --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://threatforge:password@postgres:5432/threatforge
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=your-super-secret-key-change-in-production
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./storage:/app/storage
+      - ./security_tools:/app/security_tools
+    networks:
+      - threatforge-network
+
+  # Celery Beat (Scheduler)
+  celery-beat:
+    build: .
+    command: celery -A app.celery_app beat --loglevel=info
+    environment:
+      - DATABASE_URL=postgresql://threatforge:password@postgres:5432/threatforge
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=your-super-secret-key-change-in-production
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./storage:/app/storage
+      - ./security_tools:/app/security_tools
+    networks:
+      - threatforge-network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  threatforge-network:
+    driver: bridge 
